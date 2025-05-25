@@ -48,6 +48,7 @@ impl PrivateKeyDer {
     }
 }
 
+#[allow(clippy::type_complexity)]
 fn from_slice(mut input: &[u8]) -> Result<Option<(SectionKind, Vec<u8>)>, Error> {
     let mut bytes = Vec::with_capacity(1024);
     let mut section = None::<(Vec<_>, Vec<_>)>;
@@ -75,6 +76,7 @@ fn from_slice(mut input: &[u8]) -> Result<Option<(SectionKind, Vec<u8>)>, Error>
     }
 }
 
+#[allow(clippy::type_complexity)]
 fn read(
     next_line: Option<&[u8]>,
     section: &mut Option<(Vec<u8>, Vec<u8>)>,
@@ -128,9 +130,7 @@ fn read(
                 }
             };
 
-            let der_bytes = BASE64_STANDARD
-                .decode(bytes)
-                .map_err(|e| Error::Base64Decode(e))?;
+            let der_bytes = BASE64_STANDARD.decode(bytes)?;
             return Ok(ControlFlow::Break(Some((kind, der_bytes))));
         }
     }

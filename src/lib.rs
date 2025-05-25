@@ -70,11 +70,10 @@ impl TryFrom<&PrivateSec1KeyDer> for PrivatePkcs8KeyDer {
     type Error = Error;
 
     fn try_from(key: &PrivateSec1KeyDer) -> Result<Self, Self::Error> {
-        let parameters = if let Some(parameters) = &key.parameters {
-            Some(Pkcs8Parameters::Ec(parameters.0.to_owned()))
-        } else {
-            None
-        };
+        let parameters = key
+            .parameters
+            .as_ref()
+            .map(|parameters| Pkcs8Parameters::Ec(parameters.0.to_owned()));
 
         let ec = PrivateSec1KeyDer {
             version: key.version.to_owned(),
@@ -175,6 +174,6 @@ impl TryFrom<&PrivatePkcs8KeyDer> for PrivatePkcs1KeyDer {
     type Error = Error;
 
     fn try_from(key: &PrivatePkcs8KeyDer) -> Result<Self, Self::Error> {
-        Ok(PrivatePkcs1KeyDer::from_der_slice(&key.private_key)?)
+        PrivatePkcs1KeyDer::from_der_slice(&key.private_key)
     }
 }
