@@ -1,0 +1,9 @@
+[package]
+name = "tls-pki-types"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+base64 = "0.22"
+rasn = "0.26"
+thiserror = "2"

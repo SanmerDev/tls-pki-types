@@ -1,0 +1,13 @@
+# Cargo
+target/
+Cargo.lock
+
+# IntelliJ
+*.iml
+.idea/
+
+# Local
+data/
+
+# MacOS
+.DS_Store
