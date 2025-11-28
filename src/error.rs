@@ -1,17 +1,15 @@
-use base64::DecodeError as Base64DecodeError;
-use rasn::error::{DecodeError as DerDecodeError, EncodeError as DerEncodeError};
 use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum Error {
-    #[error("{0}")]
-    DerDecode(#[from] DerDecodeError),
+    #[error(transparent)]
+    DerDecode(#[from] rasn::error::DecodeError),
 
-    #[error("{0}")]
-    DerEncode(#[from] DerEncodeError),
+    #[error(transparent)]
+    DerEncode(#[from] rasn::error::EncodeError),
 
-    #[error("{0}")]
-    Base64Decode(#[from] Base64DecodeError),
+    #[error(transparent)]
+    Base64Decode(#[from] base64::DecodeError),
 
     #[error("missing section end marker: {end_marker:?}")]
     MissingSectionEnd { end_marker: Vec<u8> },

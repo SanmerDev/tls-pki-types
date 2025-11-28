@@ -66,20 +66,19 @@ pub struct Attribute {
     pub values: SetOf<Any>,
 }
 
-impl TryFrom<&PrivateSec1KeyDer> for PrivatePkcs8KeyDer {
+impl TryFrom<PrivateSec1KeyDer> for PrivatePkcs8KeyDer {
     type Error = Error;
 
-    fn try_from(key: &PrivateSec1KeyDer) -> Result<Self, Self::Error> {
+    fn try_from(key: PrivateSec1KeyDer) -> Result<Self, Self::Error> {
         let parameters = key
             .parameters
-            .as_ref()
-            .map(|parameters| Pkcs8Parameters::Ec(parameters.0.to_owned()));
+            .map(|parameters| Pkcs8Parameters::Ec(parameters.0));
 
         let ec = PrivateSec1KeyDer {
-            version: key.version.to_owned(),
-            private_key: key.private_key.to_owned(),
+            version: key.version,
+            private_key: key.private_key,
             parameters: None,
-            public_key: key.public_key.to_owned(),
+            public_key: key.public_key,
         };
 
         Ok(PrivatePkcs8KeyDer {
@@ -94,10 +93,10 @@ impl TryFrom<&PrivateSec1KeyDer> for PrivatePkcs8KeyDer {
     }
 }
 
-impl TryFrom<&PrivatePkcs1KeyDer> for PrivatePkcs8KeyDer {
+impl TryFrom<PrivatePkcs1KeyDer> for PrivatePkcs8KeyDer {
     type Error = Error;
 
-    fn try_from(key: &PrivatePkcs1KeyDer) -> Result<Self, Self::Error> {
+    fn try_from(key: PrivatePkcs1KeyDer) -> Result<Self, Self::Error> {
         Ok(PrivatePkcs8KeyDer {
             version: Version::V0,
             algorithm: AlgorithmIdentifier {
@@ -124,12 +123,12 @@ pub struct PrivateSec1KeyDer {
 #[rasn(delegate)]
 pub struct EcParameters(pub ObjectIdentifier);
 
-impl TryFrom<&PrivatePkcs8KeyDer> for PrivateSec1KeyDer {
+impl TryFrom<PrivatePkcs8KeyDer> for PrivateSec1KeyDer {
     type Error = Error;
 
-    fn try_from(key: &PrivatePkcs8KeyDer) -> Result<Self, Self::Error> {
-        let parameters = if let Some(Pkcs8Parameters::Ec(parameters)) = &key.algorithm.parameters {
-            Some(EcParameters(parameters.to_owned()))
+    fn try_from(key: PrivatePkcs8KeyDer) -> Result<Self, Self::Error> {
+        let parameters = if let Some(Pkcs8Parameters::Ec(parameters)) = key.algorithm.parameters {
+            Some(EcParameters(parameters))
         } else {
             None
         };
@@ -170,10 +169,10 @@ pub struct OtherPrimeInfo {
     coefficient: Integer,
 }
 
-impl TryFrom<&PrivatePkcs8KeyDer> for PrivatePkcs1KeyDer {
+impl TryFrom<PrivatePkcs8KeyDer> for PrivatePkcs1KeyDer {
     type Error = Error;
 
-    fn try_from(key: &PrivatePkcs8KeyDer) -> Result<Self, Self::Error> {
+    fn try_from(key: PrivatePkcs8KeyDer) -> Result<Self, Self::Error> {
         PrivatePkcs1KeyDer::from_der_slice(&key.private_key)
     }
 }

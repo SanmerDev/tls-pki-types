@@ -3,10 +3,10 @@ use tls_pki_types::{DerObject, PrivatePkcs1KeyDer, PrivatePkcs8KeyDer, PrivateSe
 #[test]
 fn ec() {
     let pkcs8_real = PrivatePkcs8KeyDer::from_der_slice(&PKCS8_EC).unwrap();
-    let ec = PrivateSec1KeyDer::try_from(&pkcs8_real).unwrap();
+    let ec = PrivateSec1KeyDer::try_from(pkcs8_real.clone()).unwrap();
 
     let ec_real = PrivateSec1KeyDer::from_der_slice(&EC).unwrap();
-    let pkcs8 = PrivatePkcs8KeyDer::try_from(&ec).unwrap();
+    let pkcs8 = PrivatePkcs8KeyDer::try_from(ec.clone()).unwrap();
 
     assert_eq!(ec, ec_real);
     assert_eq!(pkcs8, pkcs8_real);
@@ -15,10 +15,10 @@ fn ec() {
 #[test]
 fn rsa() {
     let pkcs8_real = PrivatePkcs8KeyDer::from_der_slice(&PKCS8_RSA).unwrap();
-    let rsa = PrivatePkcs1KeyDer::try_from(&pkcs8_real).unwrap();
+    let rsa = PrivatePkcs1KeyDer::try_from(pkcs8_real.clone()).unwrap();
 
     let rsa_real = PrivatePkcs1KeyDer::from_der_slice(&RSA).unwrap();
-    let pkcs8 = PrivatePkcs8KeyDer::try_from(&rsa_real).unwrap();
+    let pkcs8 = PrivatePkcs8KeyDer::try_from(rsa_real.clone()).unwrap();
 
     assert_eq!(rsa, rsa_real);
     assert_eq!(pkcs8, pkcs8_real);
