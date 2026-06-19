@@ -37,9 +37,9 @@ jobs:
           - build: windows-x86_64
             os: windows-latest
           - build: macos-x86_64
-            os: macos-13
+            os: macos-15-intel
           - build: macos-aarch64
-            os: macos-latest
+            os: macos-15
 
     steps:
       - name: Checkout
