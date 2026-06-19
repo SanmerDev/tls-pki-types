@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
@@ -37,13 +37,13 @@ jobs:
           - build: windows-x86_64
             os: windows-latest
           - build: macos-x86_64
-            os: macos-13
+            os: macos-15-intel
           - build: macos-aarch64
-            os: macos-latest
+            os: macos-15
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
